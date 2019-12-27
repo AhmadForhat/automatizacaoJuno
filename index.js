@@ -1,20 +1,17 @@
-const express = require('express')
-const app = express()
+const CronJob = require('cron').CronJob;
 const rp = require('request-promise-native')
 
-// Transformando new date() em dd/mm/year
-function convertDate(inputFormat) {
-    function pad(s) { return (s < 10) ? '0' + s : s; }
-    var d = new Date(inputFormat)
-    return [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('/')
-  }
-const date = new Date()
-const dateHoje = convertDate(date.setDate(date.getDate()))
-const dateOntem = convertDate(date.setDate(date.getDate() - 1))
-
-app.post('/postConsulta', async(req,res) => {
+new CronJob('*/5 * * * * *', async function() {
     require('dotenv').config()
-    // API Juno
+    // Requisição get Juno consulta
+    function convertDate(inputFormat) {
+        function pad(s) { return (s < 10) ? '0' + s : s; }
+        var d = new Date(inputFormat)
+        return [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('/')
+      }
+    const date = new Date()
+    const dateHoje = convertDate(date.setDate(date.getDate()))
+    const dateOntem = convertDate(date.setDate(date.getDate() - 1))
     const urlJuno = `https://ziro-app-juno.herokuapp.com/consulta-pagamentos?beginPaymentDate=${dateOntem}&endPaymentDate=${dateHoje}`
     const usernameJuno = process.env.userJuno
     const passwordJuno = process.env.pdwJuno
@@ -37,8 +34,7 @@ app.post('/postConsulta', async(req,res) => {
     for (i = 0; i< charges.length; i++){
         arrayID.push([dados.data.data.charges[i].payments[0].id, dados.data.data.charges[i].payments[0].date]);
     }
-    
-    // Requisição post google sheets
+    // Requisição POST googlesheets
     const url = "https://sheets.ziro.app/.netlify/functions/api"
     const username = process.env.userSheets
     const password = process.env.pdwSheets
@@ -67,10 +63,8 @@ app.post('/postConsulta', async(req,res) => {
     }
     try {
         let data = await rp(optionsGoogle)
-        res.send(data)
+        console.log("Informações do POST", data, "Array Postado", arrayID)
     } catch (error) {
-        res.send(error)
+        console.log(error)
     }
-})
-
-app.listen(process.env.PORT || 3000, () => console.log(`Escutando na porta ${process.env.PORT || 3000}`))
+}, null, true, 'America/Sao_Paulo');
