@@ -12,7 +12,7 @@ const main = async function() {
     const date = new Date()
     const dateHoje = convertDate(date.setDate(date.getDate()))
     const dateOntem = convertDate(date.setDate(date.getDate() - 1))
-    const urlJuno = `https://ziro-app-juno.herokuapp.com/consulta-pagamentos?beginPaymentDate=${dateOntem}&endPaymentDate=${dateHoje}`
+    const urlJuno = `https://ziro-app-juno.herokuapp.com/consulta-pagamentos?beginPaymentConfirmation=${dateOntem}&endPaymentConfirmation=${dateHoje}`
     const usernameJuno = process.env.userJuno
     const passwordJuno = process.env.pdwJuno
     const authJuno = "Basic " + new Buffer.from(usernameJuno + ":" + passwordJuno).toString("base64");
