@@ -55,7 +55,7 @@ const main = async function() {
             "spreadsheetId": process.env.sheetsId,
             "range": "BoletosPag!A2",
             "resource": {
-                "values": [["1231231","231231231"]]
+                "values": arrayID
             },
             "valueInputOption": "raw"
         },
