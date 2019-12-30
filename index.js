@@ -1,7 +1,7 @@
 const CronJob = require('cron').CronJob;
 const rp = require('request-promise-native')
 
-new CronJob('*/5 * * * * *', async function() {
+const main = async function() {
     require('dotenv').config()
     // Requisição get Juno consulta
     function convertDate(inputFormat) {
@@ -53,9 +53,9 @@ new CronJob('*/5 * * * * *', async function() {
             "apiResource": "values",
             "apiMethod": "append",
             "spreadsheetId": process.env.sheetsId,
-            "range": "Test!A1:C1",
+            "range": "BoletosPag!A2",
             "resource": {
-                "values": arrayID
+                "values": [["1231231","231231231"]]
             },
             "valueInputOption": "raw"
         },
@@ -63,8 +63,10 @@ new CronJob('*/5 * * * * *', async function() {
     }
     try {
         let data = await rp(optionsGoogle)
-        console.log("Informações do POST", data, "Array Postado", arrayID)
+        console.log("Informações do POST", data, "Array Postado", optionsGoogle.body.resource.values)
     } catch (error) {
         console.log(error)
     }
-}, null, true, 'America/Sao_Paulo');
+}
+
+main();
