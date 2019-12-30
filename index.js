@@ -20,7 +20,7 @@ const main = async function() {
         method: "GET",
         url:urlJuno,
         headers:{
-            "token": "2sKUvYTceiMgDoSo3xTsXefMYUDACTU98Ryqh5ypByBU",
+            "token": process.env.tokensheets,
             "Authorization": authJuno
         },
         json: true
@@ -55,7 +55,7 @@ const main = async function() {
             "spreadsheetId": process.env.sheetsId,
             "range": "BoletosPag!A2",
             "resource": {
-                "values": [["1231231","231231231"]]
+                "values": arrayID
             },
             "valueInputOption": "raw"
         },
