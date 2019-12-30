@@ -20,7 +20,7 @@ const main = async function() {
         method: "GET",
         url:urlJuno,
         headers:{
-            "token": "2sKUvYTceiMgDoSo3xTsXefMYUDACTU98Ryqh5ypByBU",
+            "token": process.env.tokenNosso,
             "Authorization": authJuno
         },
         json: true
