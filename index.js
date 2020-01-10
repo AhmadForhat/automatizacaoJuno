@@ -1,4 +1,3 @@
-const CronJob = require('cron').CronJob;
 const rp = require('request-promise-native')
 
 const main = async function() {
@@ -7,12 +6,13 @@ const main = async function() {
     function convertDate(inputFormat) {
         function pad(s) { return (s < 10) ? '0' + s : s; }
         var d = new Date(inputFormat)
-        return [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('/')
+        return [d.getFullYear(),pad(d.getMonth()+1), pad(d.getDate())].join('-')
       }
     const date = new Date()
     const dateHoje = convertDate(date.setDate(date.getDate()))
-    const dateOntem = convertDate(date.setDate(date.getDate() - 1))
-    const urlJuno = `https://ziro-app-juno.herokuapp.com/consulta-pagamentos?beginPaymentConfirmation=${dateOntem}&endPaymentConfirmation=${dateHoje}`
+    const dateOntem = convertDate(date.setDate(date.getDate() - 10))
+    console.log(dateHoje, dateOntem)
+    const urlJuno = `https://ziro-app-juno.herokuapp.com/listar-cobrancas?paymentDateStart=${dateOntem}&paymentDateEnd=${dateHoje}`
     const usernameJuno = process.env.userJuno
     const passwordJuno = process.env.pdwJuno
     const authJuno = "Basic " + new Buffer.from(usernameJuno + ":" + passwordJuno).toString("base64");
@@ -26,13 +26,14 @@ const main = async function() {
         json: true
     }
     let dataJuno = await rp(optionsJuno)
+    console.log(dataJuno._embedded.charges)
 
     // Tratativa do array para puxar somente o necessário
     let arrayID = []
-    let charges = dataJuno.data.data.charges
+    let charges = dataJuno._embedded.charges
 
     for (i = 0; i< charges.length; i++){
-        arrayID.push([dados.data.data.charges[i].payments[0].id, dados.data.data.charges[i].payments[0].date]);
+        arrayID.push([dataJuno._embedded.charges[i].payments[0].id, dataJuno._embedded.charges[i].payments[0].date]);
     }
     // Requisição POST googlesheets
     const url = "https://sheets.ziro.app/.netlify/functions/api"
