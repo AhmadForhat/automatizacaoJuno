@@ -26,14 +26,13 @@ const main = async function() {
         json: true
     }
     let dataJuno = await rp(optionsJuno)
-    console.log(dataJuno._embedded.charges)
 
-    // Tratativa do array para puxar somente o necessário
+    // Tratativa do array para puxar somente o necessário -- > Mudar os parametros do loop para charges.id, charges.code e charges.dueDate
     let arrayID = []
     let charges = dataJuno._embedded.charges
 
     for (i = 0; i< charges.length; i++){
-        arrayID.push([dataJuno._embedded.charges[i].payments[0].id, dataJuno._embedded.charges[i].payments[0].date]);
+        arrayID.push([dataJuno._embedded.charges[i].id, dataJuno._embedded.charges[i].code, dataJuno._embedded.charges[i].dueDate]);
     }
     // Requisição POST googlesheets
     const url = "https://sheets.ziro.app/.netlify/functions/api"
