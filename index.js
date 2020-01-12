@@ -10,7 +10,7 @@ const main = async function() {
       }
     const date = new Date()
     const dateHoje = convertDate(date.setDate(date.getDate()))
-    const dateOntem = convertDate(date.setDate(date.getDate() - 1))
+    const dateOntem = convertDate(date.setDate(date.getDate()-1))
     console.log(dateHoje, dateOntem)
     const urlJuno = `https://ziro-app-juno.herokuapp.com/listar-cobrancas?paymentDateStart=${dateOntem}&paymentDateEnd=${dateHoje}`
     const usernameJuno = process.env.userJuno
