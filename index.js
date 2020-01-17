@@ -61,11 +61,17 @@ const main = async function() {
         },
         json: true
     }
-    try {
-        let data = await rp(optionsGoogle)
-        console.log("Informações do POST", data, "Array Postado", optionsGoogle.body.resource.values)
-    } catch (error) {
-        console.log(error)
+    let now = new Date();
+    let hora = now.getUTCHours()
+    if(hora = 10){
+        try {
+            let data = await rp(optionsGoogle)
+            console.log("Informações do POST", data, "Array Postado", optionsGoogle.body.resource.values)
+        } catch (error) {
+            console.log(error)
+        }
+    }else{
+        console.log('Hora errada')
     }
 }
 
