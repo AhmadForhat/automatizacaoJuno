@@ -11,7 +11,6 @@ const main = async function() {
     const date = new Date()
     const dateHoje = convertDate(date.setDate(date.getDate()))
     const dateOntem = convertDate(date.setDate(date.getDate()-1))
-    console.log(dateHoje, dateOntem)
     const urlJuno = `https://ziro-app-juno.herokuapp.com/listar-cobrancas?paymentDateStart=${dateOntem}&paymentDateEnd=${dateHoje}`
     const usernameJuno = process.env.userJuno
     const passwordJuno = process.env.pdwJuno
@@ -29,11 +28,11 @@ const main = async function() {
 
     // Tratativa do array para puxar somente o necessário -- > Mudar os parametros do loop para charges.id, charges.code e charges.dueDate
     let arrayID = []
-    let charges = dataJuno._embedded.charges
 
-    for (i = 0; i< charges.length; i++){
-        arrayID.push([dataJuno._embedded.charges[i].id, dataJuno._embedded.charges[i].code, dataJuno._embedded.charges[i].dueDate]);
-    }
+        let charges = dataJuno._embedded.charges
+        for (i = 0; i< charges.length; i++){
+            arrayID.push([dataJuno._embedded.charges[i].id, dataJuno._embedded.charges[i].code, dataJuno._embedded.charges[i].dueDate]);
+        }
     // Requisição POST googlesheets
     const url = "https://sheets.ziro.app/.netlify/functions/api"
     const username = process.env.userSheets
@@ -63,12 +62,12 @@ const main = async function() {
     }
     let now = new Date();
     let hora = now.getUTCHours()
-    if(hora = 10){
+    if(hora == 10){
         try {
             let data = await rp(optionsGoogle)
             console.log("Informações do POST", data, "Array Postado", optionsGoogle.body.resource.values)
         } catch (error) {
-            console.log(error)
+            console.log("Deu erro", error)
         }
     }else{
         console.log('Hora errada')
