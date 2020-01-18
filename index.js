@@ -62,7 +62,7 @@ const main = async function() {
     }
     let now = new Date();
     let hora = now.getUTCHours()
-    if(hora == 10){
+    if(hora == 10 && diaSemana != 6 && diaSemana != 0){
         try {
             let data = await rp(optionsGoogle)
             console.log("Informações do POST", data, "Array Postado", optionsGoogle.body.resource.values)
